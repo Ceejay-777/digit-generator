@@ -30,12 +30,16 @@ st.title("Handwritten Digit Generator")
 digit = st.number_input("Enter a digit (0–9):", min_value=0, max_value=9, step=1)
 
 if st.button("Generate"):
-    noise = torch.randn(5, 100)
-    labels = torch.tensor([digit]*5)
+    base_noise = torch.randn(5, 100)
+    diversity_noise = torch.randn(5, 100) * 0.25  
+    noise = base_noise + diversity_noise  
+    labels = torch.tensor([digit] * 5)
+
     with torch.no_grad():
         images = generator(noise, labels)
+        images = torch.clamp(images, -1, 1)  #
 
     grid = make_grid(images, nrow=5, normalize=True)
     npimg = grid.numpy().transpose((1, 2, 0))
-
     st.image(npimg, caption=f"Generated images for digit {digit}")
+  
