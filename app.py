@@ -37,7 +37,7 @@ if st.button("Generate"):
 
     with torch.no_grad():
         images = generator(noise, labels)
-        images += torch.randn_like(images) * 0.1  
+        images += torch.randn_like(images) * 0.3  
         images = torch.clamp(images, -1, 1)       
 
     grid = make_grid(images, nrow=5, normalize=True)
